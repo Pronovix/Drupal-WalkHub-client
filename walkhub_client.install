@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function walkhub_client_install() {
+  variable_set('walkhub_client_base_url', 'http://walkhub.net/resources');
+  variable_set('walkhub_hub_origin', 'http://walkhub.net');
+}
+
+/**
+ * Changes the default walkhub client url.
+ */
+function walkhub_client_update_7101() {
+  if (variable_get('walkhub_client_base_url') == 'http://resources.walkhub.net') {
+    variable_set('walkhub_client_base_url', 'http://walkhub.net/resources');
+  }
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function walkhub_client_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+
+  if ($phase === 'runtime') {
+    $ok = function_exists('getallheaders') || function_exists('apache_request_headers');
+    $requirements['walkhub_client'] = array(
+      'title' => $t('Walkhub client server requirements'),
+      'value' => ($ok ? $t('Ok') : $t('Incompatible')),
+      'description' => $t('Walkhub client requires either PHP 5.4+ or mod_php.'),
+      'severity' => ($ok ? REQUIREMENT_OK : REQUIREMENT_WARNING),
+    );
+  }
+
+  return $requirements;
+}

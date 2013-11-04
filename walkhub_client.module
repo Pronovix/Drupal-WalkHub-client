@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * Checks if the HTTP headers contain the Walkhub Proxy's own header.
+ *
+ * @return bool
+ */
+function walkhub_client_check_headers() {
+  $headers = array();
+
+  if (function_exists('getallheaders')) {
+    $headers = getallheaders();
+  }
+  elseif (function_exists('apache_request_headers')) {
+    $headers = apache_request_headers();
+  }
+
+  return $headers && !empty($headers['X-Walkhub-Client']);
+}
+
+/**
+ * Implements hook_init().
+ */
+function walkhub_client_init() {
+  if (walkhub_client_check_headers()) {
+    return;
+  }
+
+  if (($base = variable_get('walkhub_client_base_url')) && ($hub = variable_get('walkhub_hub_origin'))) {
+    drupal_add_js("$base/compiled.js", array(
+      'type' => 'external',
+      'every_page' => TRUE,
+      'cache' => FALSE,
+      'preprocess' => FALSE,
+    ));
+    drupal_add_js(drupal_get_path('module', 'walkhub_client') . '/walkhub.js');
+    drupal_add_js(array(
+      'walkhub_client' => array(
+        'origin' => $hub,
+      ),
+    ), array('type' => 'setting'));
+    drupal_add_css("$base/joyride.css", array(
+      'type' => 'external',
+      'every_page' => TRUE,
+      'preprocess' => FALSE,
+    ));
+    drupal_add_css("$base/walkthrough.css", array(
+      'type' => 'external',
+      'every_page' => TRUE,
+      'preprocess' => FALSE,
+    ));
+  }
+}
