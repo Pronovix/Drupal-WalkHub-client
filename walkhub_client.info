@@ -1,3 +1,4 @@
 name = WalkHub Client
 description = WalkHub Client module
+package = Walkthrough
 core = 7.x

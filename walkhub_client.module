@@ -19,10 +19,29 @@ function walkhub_client_check_headers() {
 }
 
 /**
+ * Checks if the walkhub client is enabled on the current path.
+ *
+ * Modules can disable or enable the walkhub client on certain paths
+ * by implementing hook_walkhub_client_paths().
+ *
+ * @return bool
+ */
+function walkhub_client_is_enabled() {
+  $patterns = module_invoke_all('walkhub_client_paths');
+
+  if ($patterns) {
+    return drupal_match_path($_GET['q'], implode(PHP_EOL, $patterns));
+  }
+
+  // If nothing implements the hook then allow on all paths.
+  return TRUE;
+}
+
+/**
  * Implements hook_init().
  */
 function walkhub_client_init() {
-  if (walkhub_client_check_headers()) {
+  if (walkhub_client_check_headers() || !walkhub_client_is_enabled()) {
     return;
   }
 
