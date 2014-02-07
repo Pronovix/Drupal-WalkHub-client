@@ -45,7 +45,7 @@ function walkhub_client_init() {
     return;
   }
 
-  if (($base = variable_get('walkhub_client_base_url')) && ($hub = variable_get('walkhub_hub_origin'))) {
+  if (($base = variable_get('walkhub_client_base_url', 'http://walkhub.net/resources')) && ($hub = variable_get('walkhub_hub_origin', 'http://walkhub.net'))) {
     drupal_add_js("$base/compiled.js", array(
       'type' => 'external',
       'every_page' => TRUE,
