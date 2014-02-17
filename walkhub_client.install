@@ -4,7 +4,6 @@
  * Implements hook_install().
  */
 function walkhub_client_install() {
-  variable_set('walkhub_client_base_url', 'http://walkhub.net/resources');
   variable_set('walkhub_hub_origin', 'http://walkhub.net');
 }
 
@@ -15,6 +14,13 @@ function walkhub_client_update_7101() {
   if (variable_get('walkhub_client_base_url') == 'http://resources.walkhub.net') {
     variable_set('walkhub_client_base_url', 'http://walkhub.net/resources');
   }
+}
+
+/**
+ * Removes the unnecessary walkhub_client_base_url variable.
+ */
+function walkhub_client_update_7202() {
+  variable_del('walkhub_client_base_url');
 }
 
 /**

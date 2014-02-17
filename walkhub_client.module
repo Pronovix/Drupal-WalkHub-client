@@ -45,8 +45,9 @@ function walkhub_client_init() {
     return;
   }
 
-  if (($base = variable_get('walkhub_client_base_url', 'http://walkhub.net/resources')) && ($hub = variable_get('walkhub_hub_origin', 'http://walkhub.net'))) {
-    drupal_add_js("$base/compiled.js", array(
+  if ($hub = variable_get('walkhub_hub_origin', 'http://walkhub.net')) {
+    $resources_base = $hub . '/resources/';
+    drupal_add_js("$resources_base/compiled.js", array(
       'type' => 'external',
       'every_page' => TRUE,
       'cache' => FALSE,
@@ -58,15 +59,44 @@ function walkhub_client_init() {
         'origin' => $hub,
       ),
     ), array('type' => 'setting'));
-    drupal_add_css("$base/joyride.css", array(
+    drupal_add_css("$resources_base/joyride.css", array(
       'type' => 'external',
       'every_page' => TRUE,
       'preprocess' => FALSE,
     ));
-    drupal_add_css("$base/walkthrough.css", array(
+    drupal_add_css("$resources_base/walkthrough.css", array(
       'type' => 'external',
       'every_page' => TRUE,
       'preprocess' => FALSE,
     ));
   }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function walkhub_client_menu() {
+  $items = array();
+
+  $items['admin/config/services/walkhub_client'] = array(
+    'title' => 'Walkhub client configuration',
+    'type' => MENU_NORMAL_ITEM,
+    'access arguments' => array('administer walkhub client'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('walkhub_client_configuration_form'),
+    'file' => 'walkhub_client.admin.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function walkhub_client_permission() {
+  return array(
+    'administer walkthrough client' => array(
+      'title' => t('Administer walkthrough client'),
+    ),
+  );
 }
