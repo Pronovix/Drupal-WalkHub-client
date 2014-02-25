@@ -47,9 +47,12 @@ function walkhub_client_init() {
 
   if ($hub = variable_get('walkhub_hub_origin', 'http://walkhub.net')) {
     $resources_base = $hub . '/resources/';
-    drupal_add_js("$resources_base/compiled.js", array(
+
+    // We want to reload files on cache clear.
+    $query_string = variable_get('css_js_query_string', '0');
+
+    drupal_add_js("$resources_base/compiled.js?$query_string", array(
       'type' => 'external',
-      'every_page' => TRUE,
       'cache' => FALSE,
       'preprocess' => FALSE,
     ));
@@ -59,14 +62,13 @@ function walkhub_client_init() {
         'origin' => $hub,
       ),
     ), array('type' => 'setting'));
-    drupal_add_css("$resources_base/joyride.css", array(
+
+    drupal_add_css("$resources_base/joyride.css?$query_string", array(
       'type' => 'external',
-      'every_page' => TRUE,
       'preprocess' => FALSE,
     ));
-    drupal_add_css("$resources_base/walkthrough.css", array(
+    drupal_add_css("$resources_base/walkthrough.css?$query_string", array(
       'type' => 'external',
-      'every_page' => TRUE,
       'preprocess' => FALSE,
     ));
   }
