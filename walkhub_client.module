@@ -62,11 +62,6 @@ function walkhub_client_init() {
         'origin' => $hub,
       ),
     ), array('type' => 'setting'));
-
-    drupal_add_css("$resources_base/joyride.css?$query_string", array(
-      'type' => 'external',
-      'preprocess' => FALSE,
-    ));
     drupal_add_css("$resources_base/walkthrough.css?$query_string", array(
       'type' => 'external',
       'preprocess' => FALSE,
