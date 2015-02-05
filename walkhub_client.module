@@ -92,8 +92,8 @@ function walkhub_client_menu() {
  */
 function walkhub_client_permission() {
   return array(
-    'administer walkthrough client' => array(
-      'title' => t('Administer walkthrough client'),
+    'administer walkhub client' => array(
+      'title' => t('Administer walkhub client'),
     ),
   );
 }
